@@ -2,8 +2,8 @@ import Flutter
 import UIKit
 import Foundation
 import PassKit
-import YandexCheckoutPayments
-import YandexCheckoutPaymentsApi
+import YooKassaPayments
+import YooKassaPaymentsApi
 //import CardIO
 
 public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
@@ -216,7 +216,7 @@ final class RootViewController: UIViewController {
         /// Settings to customize SDK interface.
         customizationSettings: CustomizationSettings,
         /// Setting for saving payment method.
-        savePaymentMethod: YandexCheckoutPayments.SavePaymentMethod,
+        savePaymentMethod: YooKassaPayments.SavePaymentMethod,
         completionHandler: @escaping TokenizationCompletionHandler
     ) {
         onPaymentCompletionHandler = completionHandler
@@ -233,18 +233,19 @@ final class RootViewController: UIViewController {
             isLoggingEnabled: isLoggingEnabled,
             userPhoneNumber: userPhoneNumber,
             customizationSettings: customizationSettings,
-            savePaymentMethod:savePaymentMethod
+            savePaymentMethod: SavePaymentMethod.off
+//            savePaymentMethod:savePaymentMethod
             //                    cardScanning: self
         ))
-        
+
         let viewController = TokenizationAssembly.makeModule(
             inputData: inputData,
             moduleOutput: self
         )
-        
+
         present(viewController, animated: true, completion: nil)
     }
-    
+
     public func confirm3dsCheckout(
         /// Confirmation ulr from made payment data
         confirmationUrl: String,
@@ -275,7 +276,7 @@ final class RootViewController: UIViewController {
         /// Settings to customize SDK interface.
         customizationSettings: CustomizationSettings,
         /// Setting for saving payment method.
-        savePaymentMethod: YandexCheckoutPayments.SavePaymentMethod,
+        savePaymentMethod: YooKassaPayments.SavePaymentMethod,
         completionHandler: @escaping Confirmation3dsCompletionHandler
     ) {
         on3dsConfirmationCompletionHandler = completionHandler
@@ -294,26 +295,26 @@ final class RootViewController: UIViewController {
             customizationSettings: customizationSettings,
             savePaymentMethod:savePaymentMethod
         ))
-        
+
         let viewController = TokenizationAssembly.makeModule(
             inputData: inputData,
             moduleOutput: self
         )
         viewController.start3dsProcess(requestUrl: confirmationUrl)
     }
-    
+
     public func startCheckoutWithCvcRepeatRequest(_
         bankCardRepeatModuleInputData: BankCardRepeatModuleInputData,
                                                   completionHandler: @escaping TokenizationCompletionHandler
     ) {
         onPaymentCompletionHandler = completionHandler
         let inputData: TokenizationFlow = .bankCardRepeat(bankCardRepeatModuleInputData)
-        
+
         let viewController = TokenizationAssembly.makeModule(
             inputData: inputData,
             moduleOutput: self
         )
-        
+
         present(viewController, animated: true, completion: nil)
     }
 }
@@ -328,9 +329,9 @@ extension RootViewController: TokenizationModuleOutput {
             strongSelf.dismiss(animated: true, completion: nil)
         }
     }
-    
+
     func didFinish(on module: TokenizationModuleInput,
-                   with error: YandexCheckoutPaymentsError?) {
+                   with error: YooKassaPaymentsError?) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.onPaymentCompletionHandler?(Result.failure(.cancelled))

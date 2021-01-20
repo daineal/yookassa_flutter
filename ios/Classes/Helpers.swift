@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import YandexCheckoutPayments
+import YooKassaPayments
 
 func fetchColor(_ color: [String: Any]?) -> UIColor? {
     if (color == nil) {
@@ -31,19 +31,15 @@ func fetchTokenizationSettings(paymentMethodsJson: [String]?, showYandexCheckout
     if (paymentMethodsJson?.contains("bank_card") ?? false) {
         paymentTypes.insert(.bankCard)
     }
-    if (paymentMethodsJson?.contains("yandex_money") ?? false) {
-        paymentTypes.insert(.yandexMoney)
-    }
     if (paymentMethodsJson?.contains("apple_pay") ?? false) {
         paymentTypes.insert(.applePay)
     }
     if (paymentMethodsJson?.contains("sberbank") ?? false) {
         paymentTypes.insert(.sberbank)
     }
-    
+
     return TokenizationSettings(
-        paymentMethodTypes: paymentTypes,
-        showYandexCheckoutLogo: showYandexCheckoutLogo
+        paymentMethodTypes: paymentTypes
     )
 }
 
@@ -65,7 +61,7 @@ func fetchAmount(_ amountJson: [String: Any]) -> Amount{
     return Amount(value: Decimal(Double(round(100*value)/100)), currency: fetchCurrency(amountJson["currency"] as? String))
 }
 
-func fetchSavePaymentMethodMode(_ savePaymentMethodMode: String?) -> YandexCheckoutPayments.SavePaymentMethod{
+func fetchSavePaymentMethodMode(_ savePaymentMethodMode: String?) -> YooKassaPayments.SavePaymentMethod{
     switch savePaymentMethodMode {
     case "userSelects":
         return .userSelects
