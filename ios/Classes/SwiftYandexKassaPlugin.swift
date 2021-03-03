@@ -7,16 +7,17 @@ import YooKassaPaymentsApi
 //import CardIO
 
 public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
+    var vc: RootViewController? = nil
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "yandex_kassa", binaryMessenger: registrar.messenger())
         let instance = SwiftYandexKassaPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         registrar.addApplicationDelegate(instance)
     }
-    
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if (call.method == "startCheckout" || call.method == "confirm3dsCheckout" || call.method == "startCheckoutWithCvcRepeatRequest") {
-            
+
             guard let args = call.arguments else {
                 result(TokenizationResult(success: false, error: "iOS could not extract one of obligatory arguments " +
                     "(clientApplicationKey, paymentMethods, purchaseName, purchaseDescription, amount) \n" +
@@ -30,7 +31,7 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                 let purchaseDescription = myArgs["purchaseDescription"] as? String,
                 let amountJson = myArgs["amount"] as? [String: Any]
             {
-                
+
                 let testSettingsJson = myArgs["iosTestModeSettings"] as? [String: Any]
                 var testSettings: TestModeSettings?
                 if (testSettingsJson != nil) {
@@ -39,21 +40,31 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                                                     charge: fetchAmount(testSettingsJson!["charge"] as! [String: Any]),
                                                     enablePaymentError: testSettingsJson!["enablePaymentError"] as? Bool ?? false)
                 }
-                
+
                 let mainSchemeColor = fetchColor(myArgs["iosColorScheme"] as? [String: Any])
                 var customizationSettings = CustomizationSettings()
                 if (mainSchemeColor != nil) {
                     customizationSettings = CustomizationSettings(mainScheme: mainSchemeColor!)
                 }
-                
-                let vc = RootViewController()
-                
-                vc.modalPresentationStyle = .overCurrentContext
-                UIApplication.shared.delegate!.window!!.rootViewController!.present(vc, animated: false, completion: nil)
-                
-                
+
+
+                if (vc == nil) {
+
+                    vc = RootViewController()
+
+                    vc?.modalPresentationStyle = .overCurrentContext
+                    UIApplication.shared.delegate!.window!!.makeKeyAndVisible()
+                    UIApplication.shared.delegate!.window!!.rootViewController!.present(vc!, animated: false, completion: nil)
+                }
+
+                if (vc == nil){
+                    return
+                }
+
+
+
                 if (call.method == "startCheckout") {
-                    vc.startCheckout(
+                    vc!.startCheckout(
                         clientApplicationKey: clientApplicationKey,
                         shopName: shopName,
                         purchaseDescription: purchaseDescription,
@@ -78,10 +89,11 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                         case .failure(let error):
                             result(TokenizationResult(success: false, error: error.localizedDescription).toMap())
                         }
-                        vc.dismiss(animated: true, completion: nil)
+//                        vc.dismiss(animated: true, completion: nil)
                     }
                 } else if (call.method == "confirm3dsCheckout"){
-                    vc.confirm3dsCheckout(
+                    vc!.confirm3dsCheckout(
+//                        viewController: self,
                         confirmationUrl: myArgs["confirmationUrl"] as! String,
                         clientApplicationKey: clientApplicationKey,
                         shopName: shopName,
@@ -100,14 +112,14 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                         customizationSettings: customizationSettings,
                         savePaymentMethod: fetchSavePaymentMethodMode(myArgs["savePaymentMethodMode"] as? String)
                         )
-                    { (_ response: Result<Bool, PaymentProcessError>) in
+                    { [self] (_ response: Result<Bool, PaymentProcessError>) in
                         switch response {
                         case .success(_):
                             result(TokenizationResult(success: true).toMap())
                         case .failure(let error):
                             result(TokenizationResult(success: false, error: error.localizedDescription).toMap())
                         }
-                        vc.dismiss(animated: true, completion: nil)
+                        vc!.dismiss(animated: true, completion: nil)
                     }
                 } else if (call.method == "startCheckoutWithCvcRepeatRequest") {
                     let bankCardRepeatModuleInputData = BankCardRepeatModuleInputData(
@@ -122,7 +134,7 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                         customizationSettings: customizationSettings,
                         savePaymentMethod: fetchSavePaymentMethodMode(myArgs["savePaymentMethodMode"] as? String)
                     )
-                    vc.startCheckoutWithCvcRepeatRequest(bankCardRepeatModuleInputData)
+                    vc!.startCheckoutWithCvcRepeatRequest(bankCardRepeatModuleInputData)
                     { (_ response: Result<PaymentData, PaymentProcessError>) in
                         switch response {
                         case .success(let res):
@@ -130,7 +142,7 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                         case .failure(let error):
                             result(TokenizationResult(success: false, error: error.localizedDescription).toMap())
                         }
-                        vc.dismiss(animated: true, completion: nil)
+                        self.vc!.dismiss(animated: true, completion: nil)
                     }
                 }
             } else {
@@ -142,8 +154,8 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
             result(FlutterMethodNotImplemented)
         }
     }
-    
-    
+
+
 }
 
 typealias TokenizationCompletionHandler = ((_ result: Result<PaymentData, PaymentProcessError>) -> Void)
@@ -176,18 +188,19 @@ public enum PaymentProcessError: Error {
 }
 
 final class RootViewController: UIViewController {
-    
+
     private var onPaymentCompletionHandler: TokenizationCompletionHandler?
     private var on3dsConfirmationCompletionHandler: Confirmation3dsCompletionHandler?
-    
+
     //    weak var cardScanningDelegate: CardScanningDelegate?
-    
+    var viewController: UIViewController?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
         view.isOpaque = false
     }
-    
+
     public func startCheckout(
         /// Client application key.
         clientApplicationKey: String,
@@ -218,7 +231,7 @@ final class RootViewController: UIViewController {
         /// Setting for saving payment method.
         savePaymentMethod: YooKassaPayments.SavePaymentMethod,
         completionHandler: @escaping TokenizationCompletionHandler
-    ) {
+    ) -> UIViewController {
         onPaymentCompletionHandler = completionHandler
         let inputData: TokenizationFlow = .tokenization(TokenizationModuleInputData(
             clientApplicationKey: clientApplicationKey,
@@ -238,16 +251,40 @@ final class RootViewController: UIViewController {
             //                    cardScanning: self
         ))
 
-        let viewController = TokenizationAssembly.makeModule(
-            inputData: inputData,
-            moduleOutput: self
-        )
 
-        present(viewController, animated: true, completion: nil)
+
+//        self.viewController = TokenizationAssembly.makeModule(
+//            inputData: inputData,
+//            moduleOutput: self
+//        )
+//
+        self.viewController = TokenizationAssembly.makeModule(
+               inputData: inputData,
+               moduleOutput: self as TokenizationModuleOutput
+           )
+
+
+        DispatchQueue.main.async {
+
+
+            let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+
+
+//            if(self.viewController != nil) {
+//                rootViewController?.present((self.viewController!), animated: true, completion: nil)
+//            }
+            self.present(self.viewController!, animated: true, completion: nil)
+
+
+
+        }
+        return self.viewController!
+//        present(self.viewController!, animated: true, completion: nil)
     }
 
     public func confirm3dsCheckout(
         /// Confirmation ulr from made payment data
+//        viewController: TokenizationModuleOutput,
         confirmationUrl: String,
         /// Client application key.
         clientApplicationKey: String,
@@ -296,11 +333,8 @@ final class RootViewController: UIViewController {
             savePaymentMethod:savePaymentMethod
         ))
 
-        let viewController = TokenizationAssembly.makeModule(
-            inputData: inputData,
-            moduleOutput: self
-        )
-        viewController.start3dsProcess(requestUrl: confirmationUrl)
+        (self.viewController! as! TokenizationModuleInput).start3dsProcess(requestUrl: confirmationUrl)
+
     }
 
     public func startCheckoutWithCvcRepeatRequest(_
@@ -320,14 +354,28 @@ final class RootViewController: UIViewController {
 }
 
 extension RootViewController: TokenizationModuleOutput {
+    func forceFinish() {
+//        DispatchQueue.main.async { [weak self] in
+//            self?.dismiss(animated: true)
+//            let root = UIApplication.shared.keyWindow?.rootViewController
+//            root?.dismiss(animated: true, completion: nil)
+//        }
+    }
+
     func tokenizationModule(_ module: TokenizationModuleInput,
                             didTokenize token: Tokens,
                             paymentMethodType: PaymentMethodType) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.onPaymentCompletionHandler?(Result.success(PaymentData(token: token.paymentToken, paymentMethod: paymentMethodType.rawValue)))
-            strongSelf.dismiss(animated: true, completion: nil)
+//            strongSelf.dismiss(animated: true, completion: nil)
         }
+        forceFinish()
+    }
+
+
+    func didFinish(on module: TokenizationModuleInput) {
+        forceFinish()
     }
 
     func didFinish(on module: TokenizationModuleInput,
@@ -335,18 +383,22 @@ extension RootViewController: TokenizationModuleOutput {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.onPaymentCompletionHandler?(Result.failure(.cancelled))
-            strongSelf.dismiss(animated: true)
+//            strongSelf.dismiss(animated: true)
         }
+        forceFinish()
     }
-    
+
     func didSuccessfullyPassedCardSec(on module: TokenizationModuleInput) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.on3dsConfirmationCompletionHandler?(Result.success(true))
-            strongSelf.dismiss(animated: true, completion: nil)
+//            strongSelf.dismiss(animated: true, completion: nil)
         }
+        forceFinish()
     }
 }
+
+
 
 // MARK: - CardScanning
 //
