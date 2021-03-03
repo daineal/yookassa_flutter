@@ -44,22 +44,27 @@ fun fetchPaymentMethods(methods: List<String>?): Set<PaymentMethodType> {
 }
 
 fun fetchGooglePayParameters(parameters: List<String>?): Set<GooglePayCardNetwork> {
+
     val result: HashSet<GooglePayCardNetwork> = HashSet()
-    if (parameters?.contains("AMEX")!!) {
-        result.add(GooglePayCardNetwork.AMEX)
-    } else if (parameters.contains("DISCOVER")) {
-        result.add(GooglePayCardNetwork.DISCOVER)
-    } else if (parameters.contains("JCB")) {
-        result.add(GooglePayCardNetwork.JCB)
-    } else if (parameters.contains("MASTERCARD")) {
-        result.add(GooglePayCardNetwork.MASTERCARD)
-    } else if (parameters.contains("VISA")) {
-        result.add(GooglePayCardNetwork.VISA)
-    } else if (parameters.contains("INTERAC")) {
-        result.add(GooglePayCardNetwork.INTERAC)
-    } else if (parameters.contains("OTHER")) {
-        result.add(GooglePayCardNetwork.OTHER)
-    }
+//    if (parameters?.contains("AMEX")!!) {
+//        result.add(GooglePayCardNetwork.AMEX)
+//    } else if (parameters.contains("DISCOVER")) {
+//        result.add(GooglePayCardNetwork.DISCOVER)
+//    } else if (parameters.contains("JCB")) {
+//        result.add(GooglePayCardNetwork.JCB)
+//    } else if (parameters.contains("MASTERCARD")) {
+//        result.add(GooglePayCardNetwork.MASTERCARD)
+//    } else if (parameters.contains("VISA")) {
+//        result.add(GooglePayCardNetwork.VISA)
+//    } else if (parameters.contains("INTERAC")) {
+//        result.add(GooglePayCardNetwork.INTERAC)
+//    } else if (parameters.contains("OTHER")) {
+//        result.add(GooglePayCardNetwork.OTHER)
+//    }
+
+    result.add(GooglePayCardNetwork.OTHER)
+    result.add(GooglePayCardNetwork.MASTERCARD)
+    result.add(GooglePayCardNetwork.VISA)
     return result
 }
 
