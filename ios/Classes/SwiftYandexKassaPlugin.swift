@@ -53,7 +53,7 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                     vc = RootViewController()
 
                     vc?.modalPresentationStyle = .overCurrentContext
-                    UIApplication.shared.delegate!.window!!.makeKeyAndVisible()
+``//                    UIApplication.shared.delegate!.window!!.makeKeyAndVisible()
                     UIApplication.shared.delegate!.window!!.rootViewController!.present(vc!, animated: false, completion: nil)
                 }
 
@@ -119,7 +119,8 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                         case .failure(let error):
                             result(TokenizationResult(success: false, error: error.localizedDescription).toMap())
                         }
-                        vc!.dismiss(animated: true, completion: nil)
+//                        vc!.dismiss(animated: true, completion: nil)
+                        self.vc = nil
                     }
                 } else if (call.method == "startCheckoutWithCvcRepeatRequest") {
                     let bankCardRepeatModuleInputData = BankCardRepeatModuleInputData(
@@ -142,7 +143,8 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                         case .failure(let error):
                             result(TokenizationResult(success: false, error: error.localizedDescription).toMap())
                         }
-                        self.vc!.dismiss(animated: true, completion: nil)
+//                        self.vc!.dismiss(animated: true, completion: nil)
+                        self.vc = nil
                     }
                 }
             } else {
@@ -355,11 +357,11 @@ final class RootViewController: UIViewController {
 
 extension RootViewController: TokenizationModuleOutput {
     func forceFinish() {
-//        DispatchQueue.main.async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
 //            self?.dismiss(animated: true)
 //            let root = UIApplication.shared.keyWindow?.rootViewController
 //            root?.dismiss(animated: true, completion: nil)
-//        }
+        }
     }
 
     func tokenizationModule(_ module: TokenizationModuleInput,
@@ -370,7 +372,7 @@ extension RootViewController: TokenizationModuleOutput {
             strongSelf.onPaymentCompletionHandler?(Result.success(PaymentData(token: token.paymentToken, paymentMethod: paymentMethodType.rawValue)))
 //            strongSelf.dismiss(animated: true, completion: nil)
         }
-        forceFinish()
+//        forceFinish()
     }
 
 
@@ -383,7 +385,7 @@ extension RootViewController: TokenizationModuleOutput {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.onPaymentCompletionHandler?(Result.failure(.cancelled))
-//            strongSelf.dismiss(animated: true)
+            strongSelf.dismiss(animated: true)
         }
         forceFinish()
     }
@@ -394,7 +396,13 @@ extension RootViewController: TokenizationModuleOutput {
             strongSelf.on3dsConfirmationCompletionHandler?(Result.success(true))
 //            strongSelf.dismiss(animated: true, completion: nil)
         }
-        forceFinish()
+//        forceFinish()
+
+        DispatchQueue.main.async { [weak self] in
+            self?.dismiss(animated: true)
+            let root = UIApplication.shared.keyWindow?.rootViewController
+            root?.dismiss(animated: true, completion: nil)
+        }
     }
 }
 
