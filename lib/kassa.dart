@@ -8,24 +8,30 @@ class YandexKassa {
   static const MethodChannel _channel = const MethodChannel('yandex_kassa');
 
   static Future<TokenizationResult> startCheckout(
-          PaymentParameters paymentParameters) async =>
+      PaymentParameters paymentParameters) async =>
       TokenizationResult.fromJson(
           await _channel.invokeMapMethod<String, dynamic>(
               'startCheckout', paymentParameters.json));
 
   static Future<TokenizationResult> startCheckoutWithCvcRepeatRequest(
-          PaymentParameters paymentParameters, String paymentId) async =>
+      PaymentParameters paymentParameters, String paymentId) async =>
       TokenizationResult.fromJson(
           await _channel.invokeMapMethod<String, dynamic>(
               'startCheckoutWithCvcRepeatRequest',
               (paymentParameters.json ?? {})
                 ..addAll({"paymentId": paymentId})));
 
+  static Future<dynamic> forceFinish(PaymentParameters paymentParameters) async =>
+      TokenizationResult.fromJson(
+          await _channel.invokeMapMethod<String, dynamic>(
+              'forceFinish', paymentParameters.json));
+
   static Future<dynamic> confirm3dsCheckout(
-          PaymentParameters paymentParameters, Uri confirmationUrl) async =>
+      PaymentParameters paymentParameters, Uri confirmationUrl) async =>
       TokenizationResult.fromJson(
           await _channel.invokeMapMethod<String, dynamic>(
               'confirm3dsCheckout',
-              (paymentParameters.json ?? {})
-                ..addAll({"confirmationUrl": confirmationUrl.toString()})));
+              Map<String, dynamic>.from(
+                  Map<String, dynamic>.from((paymentParameters.json ?? {}))
+                    ..addAll({"confirmationUrl": confirmationUrl.toString()}))));
 }

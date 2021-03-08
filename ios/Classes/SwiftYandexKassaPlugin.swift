@@ -16,7 +16,7 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if (call.method == "startCheckout" || call.method == "confirm3dsCheckout" || call.method == "startCheckoutWithCvcRepeatRequest") {
+        if (call.method == "startCheckout" || call.method == "confirm3dsCheckout" || call.method == "startCheckoutWithCvcRepeatRequest" || call.method == "forceFinish") {
 
             guard let args = call.arguments else {
                 result(TokenizationResult(success: false, error: "iOS could not extract one of obligatory arguments " +
@@ -53,7 +53,7 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
                     vc = RootViewController()
 
                     vc?.modalPresentationStyle = .overCurrentContext
-``//                    UIApplication.shared.delegate!.window!!.makeKeyAndVisible()
+//                    UIApplication.shared.delegate!.window!!.makeKeyAndVisible()
                     UIApplication.shared.delegate!.window!!.rootViewController!.present(vc!, animated: false, completion: nil)
                 }
 
@@ -146,6 +146,16 @@ public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
 //                        self.vc!.dismiss(animated: true, completion: nil)
                         self.vc = nil
                     }
+                } else if (call.method == "forceFinish") {
+                    DispatchQueue.main.async { [weak self] in
+//                        self?.dismiss(animated: true)
+                        let root = UIApplication.shared.keyWindow?.rootViewController
+                        root?.dismiss(animated: true, completion: nil)
+                    }
+                    self.vc!.dismiss(animated: true, completion: nil)
+                    vc!.dismiss(animated: true, completion: nil)
+
+                    self.vc = nil
                 }
             } else {
                 result(TokenizationResult(success: false, error: "iOS could not extract one of obligatory arguments " +
