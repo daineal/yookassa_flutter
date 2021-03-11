@@ -1,5 +1,7 @@
 # yandex_kassa
 
+https://github.com/idrats/yandex_kassa fork
+
 Yandex.Kassa (Yandex.Checkout) plugin for both Android and iOS platforms.
 Implements Yandex Checkout SDK for Flutter.
 Official documentation can be found here:
