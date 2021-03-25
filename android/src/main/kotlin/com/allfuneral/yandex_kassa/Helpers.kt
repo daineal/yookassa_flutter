@@ -88,7 +88,7 @@ fun fetchTestParameters(data: HashMap<String, *>?): TestParameters {
     val googlePayTestEnvironment = data?.get("google_pay_test") as Boolean?
     val mockConfiguration = data?.get("mock_config") as HashMap<*, *>?
     return TestParameters(showLogs = showLogs ?: true,
-            googlePayTestEnvironment = googlePayTestEnvironment ?: true,
+            googlePayTestEnvironment = false,
             mockConfiguration = fetchMockConfiguration(mockConfiguration))
 }
 
