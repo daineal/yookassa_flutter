@@ -18,7 +18,9 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://dl.bintray.com/yandex-money/maven' }
+        //maven { url 'https://dl.bintray.com/yandex-money/maven' }
+        maven { url "https://jitpack.io" }
+
     }
 }
 
@@ -41,5 +43,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.yandex.money:checkout:3.0.4'
+    //implementation 'com.yandex.money:checkout:3.0.4'
+    implementation 'com.github.daineal:yandex-checkout-android-sdk:3.0.4'
 }
