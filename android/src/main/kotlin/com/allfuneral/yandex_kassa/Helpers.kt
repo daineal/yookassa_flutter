@@ -1,7 +1,13 @@
 package com.allfuneral.yandex_kassa
 
 import android.graphics.Color
-import ru.yandex.money.android.sdk.*
+//import ru.yandex.money.android.sdk.*
+import ru.yoomoney.sdk.kassa.payments.*
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.*
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.Amount
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.PaymentMethodType
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.SavePaymentMethod
+import ru.yoomoney.sdk.kassa.payments.ui.color.ColorScheme
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.HashMap
@@ -34,9 +40,9 @@ fun fetchPaymentMethods(methods: List<String>?): Set<PaymentMethodType> {
     if (methods.contains("sberbank")) {
         result.add(PaymentMethodType.SBERBANK)
     }
-    if (methods.contains("yandex_money")) {
-        result.add(PaymentMethodType.YANDEX_MONEY)
-    }
+//    if (methods.contains("yandex_money")) {
+//        result.add(PaymentMethodType.YANDEX_MONEY)
+//    }
     if (methods.contains("google_pay")) {
         result.add(PaymentMethodType.GOOGLE_PAY)
     }
