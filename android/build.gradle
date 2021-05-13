@@ -18,7 +18,8 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://dl.bintray.com/yandex-money/maven' }
+//        maven { url 'https://dl.bintray.com/yandex-money/maven' }
+        mavenCentral()
     }
 }
 
@@ -32,7 +33,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -41,5 +42,7 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.yandex.money:checkout:3.0.4'
+//    implementation 'com.yandex.money:checkout:3.0.4'
+    implementation 'ru.yoomoney.sdk.kassa.payments:yookassa-android-sdk:5.1.4'
+
 }
