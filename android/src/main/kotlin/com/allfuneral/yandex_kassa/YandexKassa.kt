@@ -6,7 +6,12 @@ import android.util.Log
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.PluginRegistry
-import ru.yandex.money.android.sdk.*
+//import ru.yandex.money.android.sdk.*
+import ru.yoomoney.sdk.kassa.payments.Checkout
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.PaymentParameters
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.SavedBankCardPaymentParameters
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.TestParameters
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.UiParameters
 
 const val REQUEST_TOKENIZE_CODE = 100
 

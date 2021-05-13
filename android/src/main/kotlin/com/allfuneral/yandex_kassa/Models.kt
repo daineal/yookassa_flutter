@@ -1,7 +1,10 @@
 package com.allfuneral.yandex_kassa
 
-import ru.yandex.money.android.sdk.PaymentMethodType
-import ru.yandex.money.android.sdk.TokenizationResult
+import ru.yoomoney.sdk.kassa.payments.TokenizationResult
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.PaymentMethodType
+
+//import ru.yandex.money.android.sdk.PaymentMethodType
+//import ru.yandex.money.android.sdk.TokenizationResult
 
 interface TokenizationResultCallback {
     fun success(tokenizationResult: TokenizationResult?)
@@ -14,7 +17,7 @@ fun TokenizationResult.toMap(): HashMap<String, String> = hashMapOf(
             PaymentMethodType.SBERBANK -> "sberbank"
             PaymentMethodType.BANK_CARD -> "bank_card"
             PaymentMethodType.GOOGLE_PAY -> "google_pay"
-            PaymentMethodType.YANDEX_MONEY -> "yandex_money"
+            PaymentMethodType.YOO_MONEY -> "yandex_money"
         }
 )
 

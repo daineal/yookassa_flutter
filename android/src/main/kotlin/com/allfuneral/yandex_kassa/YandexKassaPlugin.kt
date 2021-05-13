@@ -7,7 +7,11 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import ru.yandex.money.android.sdk.*
+//import ru.yandex.money.android.sdk.*
+import ru.yoomoney.sdk.kassa.payments.TokenizationResult
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.GooglePayParameters
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.PaymentParameters
+import ru.yoomoney.sdk.kassa.payments.checkoutParameters.SavedBankCardPaymentParameters
 
 
 /** YandexKassaPlugin */
