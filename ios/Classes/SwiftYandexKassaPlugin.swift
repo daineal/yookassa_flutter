@@ -3,7 +3,7 @@ import UIKit
 import Foundation
 import PassKit
 import YooKassaPayments
-import YooKassaPaymentsApi
+//import YooKassaPaymentsApi
 //import CardIO
 
 public class SwiftYandexKassaPlugin: NSObject, FlutterPlugin {
