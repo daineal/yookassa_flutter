@@ -1,10 +1,11 @@
 PODS:
   - Flutter (1.0.0)
   - FunctionalSwift (1.2.0)
-  - MoneyAuth (2.0.0):
+  - MoneyAuth (2.21.0):
     - FunctionalSwift
+    - ThreatMetrixAdapter
     - YooMoneyCoreApi
-  - When (4.0.0)
+  - ThreatMetrixAdapter (2.0.0)
   - yandex_kassa (0.0.1):
     - Flutter
     - YooKassaPayments
@@ -14,38 +15,37 @@ PODS:
   - YandexMobileMetrica/Dynamic/Core (3.12.0)
   - YandexMobileMetrica/Dynamic/Crashes (3.12.0):
     - YandexMobileMetrica/Dynamic/Core
-  - YooKassaPayments (5.1.0):
-    - FunctionalSwift (~> 1.2.0)
-    - MoneyAuth (~> 2.0.0)
-    - When (~> 4.0.0)
+  - YooKassaPayments (5.4.0):
+    - MoneyAuth (~> 2.21.0)
+    - ThreatMetrixAdapter (~> 2.0.0)
     - YandexMobileMetrica/Dynamic (~> 3.12.0)
     - YooKassaPaymentsApi (~> 2.3.0)
-    - YooKassaWalletApi (~> 2.2.0)
+    - YooKassaWalletApi (~> 2.3.0)
     - YooMoneyCoreApi (~> 1.9.0)
   - YooKassaPaymentsApi (2.3.0):
     - FunctionalSwift (~> 1.2.0)
     - YooMoneyCoreApi (~> 1.9.0)
-  - YooKassaWalletApi (2.2.0):
+  - YooKassaWalletApi (2.3.0):
     - FunctionalSwift (~> 1.2.0)
     - YooMoneyCoreApi (~> 1.9.0)
-  - YooMoneyCoreApi (1.9.0):
+  - YooMoneyCoreApi (1.9.1):
     - FunctionalSwift (~> 1.2.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - yandex_kassa (from `.symlinks/plugins/yandex_kassa/ios`)
-  - YooKassaPayments (from `https://github.com/yoomoney/yookassa-payments-swift.git`, tag `5.1.0`)
+  - YooKassaPayments (from `https://github.com/yoomoney/yookassa-payments-swift.git`, tag `5.4.0`)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - FunctionalSwift
-    - When
     - YandexMobileMetrica
     - YooKassaPaymentsApi
     - YooKassaWalletApi
     - YooMoneyCoreApi
   https://github.com/yoomoney-tech/cocoa-pod-specs.git:
     - MoneyAuth
+    - ThreatMetrixAdapter
 
 EXTERNAL SOURCES:
   Flutter:
@@ -54,25 +54,25 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/yandex_kassa/ios"
   YooKassaPayments:
     :git: https://github.com/yoomoney/yookassa-payments-swift.git
-    :tag: 5.1.0
+    :tag: 5.4.0
 
 CHECKOUT OPTIONS:
   YooKassaPayments:
     :git: https://github.com/yoomoney/yookassa-payments-swift.git
-    :tag: 5.1.0
+    :tag: 5.4.0
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   FunctionalSwift: 1b839fcf50b8db067885938df54f818518356dbb
-  MoneyAuth: 906847277f9b3e0c59e920133dad70a0933374ab
-  When: 4ffc88d535a094ad4bd5eaf2fd187de747e716d1
-  yandex_kassa: f420f5fb1afb20632ee0192d88c1c8148b872666
+  MoneyAuth: 60e6885924b05d05dbe13c91d034db37cd2d918f
+  ThreatMetrixAdapter: c5ea4cc20dd82931fabeb596c3e86d300c2d14fb
+  yandex_kassa: 471d4790483aff405922be48c399221f6621b544
   YandexMobileMetrica: 7ba67267e1ef841f77d5db17a5091b8e9eba911f
-  YooKassaPayments: 0f0f3a9597a84f86eb979f81c852392850c5ef3a
+  YooKassaPayments: 8f4050a055f1c62b22d4cfab3e4f50676b9fbf57
   YooKassaPaymentsApi: 66302803d0389fbc27238d8ff9447c10ac1e31bf
-  YooKassaWalletApi: 5fa5f93ebd08d926f8f4adaa5f50863ce6602013
-  YooMoneyCoreApi: 4f40673a79d11e95af850bb97f264995ac47a873
+  YooKassaWalletApi: 9ca2fa3c2827721d646ee8f770509e7eeea98743
+  YooMoneyCoreApi: 0d4da37a1619a4c92df0962ecc48d1665dbae4f4
 
-PODFILE CHECKSUM: 674e0169224899ff4f91d959614044efc092e748
+PODFILE CHECKSUM: 0bde2899bb1c90085684705dd96fc45a22ea8780
 
 COCOAPODS: 1.10.1
