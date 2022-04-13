@@ -19,6 +19,8 @@ const val REQUEST_TOKENIZE_CODE = 100
 open class YandexKassa : ActivityAware, PluginRegistry.ActivityResultListener {
     private var binding: ActivityPluginBinding? = null
     private var callback: TokenizationResultCallback? = null
+    private lateinit var activity: Activity
+
 
     private fun checkBinding(resultCallback: TokenizationResultCallback): Boolean {
         if (binding?.activity?.application == null) {
@@ -30,6 +32,7 @@ open class YandexKassa : ActivityAware, PluginRegistry.ActivityResultListener {
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         this.binding = binding
+        this.activity = binding.activity
         binding.addActivityResultListener(this)
     }
 
@@ -47,6 +50,12 @@ open class YandexKassa : ActivityAware, PluginRegistry.ActivityResultListener {
                 it.activity.startActivityForResult(intent, REQUEST_TOKENIZE_CODE)
             }
         }
+    }
+
+
+    fun forceFinish(paymentParameters: PaymentParameters) {
+//        it.activity.onDestroy()
+        binding!!.activity.onBackPressed();
     }
 
 

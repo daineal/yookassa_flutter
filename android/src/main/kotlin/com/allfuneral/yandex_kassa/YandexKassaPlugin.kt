@@ -48,7 +48,7 @@ public class YandexKassaPlugin : FlutterPlugin, MethodCallHandler, YandexKassa()
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
 
         when (call.method) {
-            "startCheckout", "confirm3dsCheckout", "startCheckoutWithCvcRepeatRequest" -> {
+            "startCheckout", "confirm3dsCheckout", "forceFinish", "startCheckoutWithCvcRepeatRequest" -> {
 
                 val amount = call.argument<HashMap<String, *>>("amount")
                 val purchaseName = call.argument<String>("purchaseName")
@@ -88,7 +88,11 @@ public class YandexKassaPlugin : FlutterPlugin, MethodCallHandler, YandexKassa()
                     val confirmationUrl = call.argument<String>("confirmationUrl")
                     confirm3dsCheckout(paymentParameters, confirmationUrl!!, fetchTokenizationResultHandler(result), fetchTestParameters(androidTestModeSettings), fetchUiParameters(showYandexCheckoutLogo
                             ?: true, androidColorScheme))
-                } else {
+                }
+                else if(call.method == "forceFinish") {
+                    forceFinish(paymentParameters)
+                }
+                else {
                     if (call.method == "startCheckout") {
                         startCheckout(paymentParameters, fetchTokenizationResultHandler(result), fetchTestParameters(androidTestModeSettings), fetchUiParameters(showYandexCheckoutLogo
                                 ?: true, androidColorScheme))
